@@ -1,0 +1,40 @@
+from collections import deque
+
+# Contoh representasi state Rubik sebagai list dari 8 sudut
+# Setiap elemen dari list ini bisa menjadi tuple yang menyimpan posisi dan orientasi dari sudut tersebut
+initial_state = [...]  # State awal Rubik (acak)
+goal_state = [...]     # State Rubik yang sudah selesai
+
+# Fungsi untuk melakukan gerakan pada Rubik
+def move(state, move_type):
+    # Implementasi dari gerakan pada Rubik
+    new_state = state[:]  # Duplikat state
+    # Ubah posisi dan orientasi berdasarkan gerakan (move_type)
+    return new_state
+
+# BFS untuk mencari solusi
+def bfs_solve(initial_state, goal_state):
+    queue = deque([(initial_state, [])])  # Menyimpan state dan urutan gerakan
+    visited = set()  # Menyimpan state yang sudah dikunjungi
+
+    while queue:
+        current_state, moves = queue.popleft()
+        
+        # Jika state saat ini adalah state tujuan, kembalikan urutan gerakan
+        if current_state == goal_state:
+            return moves
+
+        # Lakukan semua gerakan pada state saat ini
+        for move_type in ["U", "D", "L", "R", "F", "B"]:  # Gerakan rotasi sisi
+            next_state = move(current_state, move_type)
+
+            # Jika state belum pernah dikunjungi
+            if tuple(next_state) not in visited:
+                visited.add(tuple(next_state))
+                queue.append((next_state, moves + [move_type]))
+
+    return None  # Jika tidak ditemukan solusi
+
+# Panggil fungsi pencarian untuk menyelesaikan Rubik
+solution = bfs_solve(initial_state, goal_state)
+print("Solusi ditemukan:", solution)
